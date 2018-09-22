@@ -106,6 +106,9 @@ hs_err_pid*
 *tmpfiles
 *lol
 *test-output
+*.settings
+.classpath
+.project
 
 # End of https://www.gitignore.io/api/java,test
 
