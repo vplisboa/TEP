@@ -1,36 +1,53 @@
 package Action.algoritmos.trie;
 
+import java.util.List;
+
 public class Trie {
 	private TrieNode raiz;
 	
-	public Trie()
+	public Trie(List<String> listaPalavras)
 	{
 		raiz = new TrieNode();
-	}
-	
-	public void adicionar(String palavra)
-	{
-		TrieNode noAtual = raiz;
-		for (int i = 0; i < palavra.length(); i++) 
+		for (String palavra : listaPalavras) 
 		{
-			noAtual = noAtual.getFilho().computeIfAbsent(palavra.charAt(i), c -> new TrieNode());
+			raiz.adicionarPalavra(palavra);
 		}
-		noAtual.setFimDaPalavra(true);
 	}
 	
-	public boolean procurarNo(String palavra)
+	public boolean procurarPrefixo(String prefixo)
+	{
+		TrieNode atual = raiz;
+		for(int i = 0; i<prefixo.length();i++)
+		{
+			char caractere = prefixo.charAt(i);
+			TrieNode no = atual.getFilho(caractere);
+			if(no == null)
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public boolean procurarPalavra(String palavra)
 	{
 		TrieNode atual = raiz;
 		for(int i = 0; i<palavra.length();i++)
 		{
 			char caractere = palavra.charAt(i);
-			TrieNode no = atual.getFilho().get(caractere);
+			TrieNode no = atual.getFilho(caractere);
 			if(no == null)
 			{
 				return false;
 			}
 			atual = no;
 		}
-		return atual.isFimDaPalavra();
+		
+		return false || atual.isFimDaPalavra();
 	}
+
+	public TrieNode getRaiz() {
+		return raiz;
+	}
+	
 }

@@ -13,8 +13,8 @@ public class TrieUnitTest
 	protected Trie prePopularTrie()
 	{
 		Trie trie = new Trie();
-		trie.adicionar("Topicos");
-		trie.adicionar("Especiais");
+		trie.adicionar("topicos");
+		trie.adicionar("especiais");
 		trie.adicionar("em");
 		trie.adicionar("programacao");
 		
@@ -33,11 +33,10 @@ public class TrieUnitTest
 	{
 		Trie trie = prePopularTrie();
 		
-		assertTrue(trie.procurarNo("Topicos"));
-		assertTrue(trie.procurarNo("Especiais"));
+		assertTrue(trie.procurarNo("topicos"));
+		assertTrue(trie.procurarNo("especiais"));
 		assertTrue(trie.procurarNo("em"));
 		
-		assertFalse(trie.procurarNo("Em"));
 		assertFalse(trie.procurarNo("so"));
 		assertFalse(trie.procurarNo("testando"));
 	}
