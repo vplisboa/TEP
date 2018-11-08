@@ -19,7 +19,7 @@ public class DadoViciado
 	private static int intervaloChancesFace5;
 	private static int intervaloChancesFace6;
 
-	protected static void formatarProbabilidades(String... probabilidades)
+	private static void formatarProbabilidades(String... probabilidades)
 	{
 		
 		intervaloChancesFace1 = Integer.parseInt(probabilidades[0].split("/")[0]);
@@ -31,7 +31,7 @@ public class DadoViciado
 
 	}
 
-	protected static int escolherValor()
+	private static int escolherValor()
 	{
 		Random rand = new Random();
 		int valorLancado = rand.nextInt(intervaloChancesFace6+1);
@@ -39,7 +39,7 @@ public class DadoViciado
 		return valorLancado;
 	}
 	
-	protected static void lancarDado()
+	private static void lancarDado()
 	{
 		int lancamento = escolherValor();
 		if(lancamento < intervaloChancesFace1)
@@ -69,7 +69,7 @@ public class DadoViciado
 	}
 
 	//- tres resultados iguais em 3 lancamentos seguidos
-	protected static void tresResultadosIguaisTresLancamentos()
+	private static void tresLancamentosTresResultadosIguais()
 	{
 		int numeroTentativas = 0;
 		int valorAnterior = intervaloChancesFace6 + 2; //variavel inicializada com um valor que nao pode ser encontrado pela funcao escolheValor()
@@ -94,53 +94,41 @@ public class DadoViciado
 	}
 	
 	//- dois pares seguidos em quatro lancamentos, exemplo: A = B, C = D
-	protected static void doisParesSeguidosQuatroLancamentos()
+	private static void quatroLancamentosDoisParesSeguidos()
 	{
-		int numeroTentativas = 0;
-		int valorAnterior = intervaloChancesFace6 + 2; //variavel inicializada com um valor que nao pode ser encontrado pela funcao escolheValor()
-		int contagemRepetidos = 0;
-		int quantidadePares = 0;
-		while(quantidadePares < 2)
+		int numeroTentativas = 4;
+		int valor1 = escolherValor();
+		int valor2 = escolherValor();
+		int valor3 = escolherValor();
+		int valor4 = escolherValor();
+		while(true)
 		{
-			int valor = escolherValor();
-			if(valor == valorAnterior)
+			if(valor1 == valor2 && valor3 == valor4)
 			{
-				numeroTentativas++;
-				contagemRepetidos++;
+				System.out.println("Resultado foi encontrado em " + numeroTentativas + " tentativas");	
+				break;
 			}
-			else
-			{
-				numeroTentativas++;
-				contagemRepetidos = 0;
-				valorAnterior = valor;
-			}
-			
-			if(contagemRepetidos == 2)
-			{
-				quantidadePares++;
-				contagemRepetidos = 0;
-			}
-			else if( quantidadePares == 1 && contagemRepetidos == 0)
-			{
-				quantidadePares = 0;
-			}
-			System.out.println(valor + " :  " + contagemRepetidos + " :    " + quantidadePares);
+			valor1 = valor2;
+			valor2 = valor3;
+			valor3 = valor4;
+			valor4 = escolherValor();
+			numeroTentativas++;
+			System.out.println(valor1 + " - " + valor2 + " - " + valor3 + " - " + valor4);
 		}
-		System.out.println("Resultado foi encontrado em " + numeroTentativas + " tentativas");
 	}
 	
 	public static void main(String[] args)
 	{
 		String pesoFace1 = "1/6";
 		String pesoFace2 = "1/6";
-		String pesoFace3 = "5/6";
+		String pesoFace3 = "1/6";
 		String pesoFace4 = "1/6";
 		String pesoFace5 = "1/6";
 		String pesoFace6 = "1/6";
 		formatarProbabilidades(pesoFace1,pesoFace2,pesoFace3,pesoFace4,pesoFace5,pesoFace6);
 		//lancarDado();
-		tresResultadosIguaisTresLancamentos();
-		doisParesSeguidosQuatroLancamentos();
+		tresLancamentosTresResultadosIguais();
+		quatroLancamentosDoisParesSeguidos();
 		
 	}
 }
