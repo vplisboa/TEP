@@ -16,7 +16,7 @@ public class MoedaInjusta
 	private static int chancesCoroa;
 	private static int quantidadeLancamentos;
 
-	protected static void formatarProbabilidades(String chance, int totalLancamentos)
+	private static void formatarProbabilidades(String chance, int totalLancamentos)
 	{
 		String[] chanceFormatada = chance.split("/");
 		chancesCara = Integer.parseInt(chanceFormatada[0]);
@@ -24,14 +24,14 @@ public class MoedaInjusta
 		quantidadeLancamentos = totalLancamentos;
 	}
 
-	protected static int escolherValor()
+	private static int escolherValor()
 	{
 		Random rand = new Random();
 		int lancamento = rand.nextInt(chancesCoroa);// escolhe um numero entre 0 e chances de coroa - 1
 		return lancamento;
 	}
 
-	protected static String lancarMoeda()
+	private static String lancarMoeda()
 	{
 		int lancamento = escolherValor();
 		if (lancamento < chancesCara)
@@ -44,7 +44,7 @@ public class MoedaInjusta
 		}
 	}
 
-	protected static int obterCincoCaras()
+	private static int obterCincoCaras()
 	{
 		int quantidadeCaras = 0;
 		int quantidadeLancamentos = 0;
@@ -60,7 +60,7 @@ public class MoedaInjusta
 		return quantidadeLancamentos;
 	}
 
-	protected static int obterDuasCarasSeguidasDuasVezes()
+	private static int obterDuasCarasSeguidasDuasVezes()
 	{
 		int quantidadeCaras = 0;
 		int quantidadeLancamentos = 0;
@@ -90,12 +90,12 @@ public class MoedaInjusta
 		return quantidadeLancamentos;
 	}
 
-	protected static int calcularMediaLancamentos(int totalDeLancamentos)
+	private static int calcularMediaLancamentos(int totalDeLancamentos)
 	{
 		return totalDeLancamentos / quantidadeLancamentos;
 	}
 
-	protected static void gerarSimulacao()
+	private static void gerarSimulacao()
 	{
 
 		int somaLancamentos2Caras2Vezes = 0;
@@ -112,14 +112,15 @@ public class MoedaInjusta
 
 	}
 
-	protected static void mostrarResultado(int mediaLancamentos5Caras, int mediaLancamentos2Caras2Vezes)
+	private static void mostrarResultado(int mediaLancamentos5Caras, int mediaLancamentos2Caras2Vezes)
 	{
+		System.out.println("A simulacao abaixo foi gerada utilizando a seguinte probabilidade de caras: "+ chancesCara + "/"+chancesCoroa);
 		System.out.println("A simulacao gerou o seguinte resultado para " + quantidadeLancamentos + " execucoes");
 		System.out.println("A media de lancamentos para se obter 5 caras foi: "+ mediaLancamentos5Caras);
-		System.out.println("A media de lancamentos para se obter 2 caras 2 vezes foi: "+ mediaLancamentos2Caras2Vezes);
+		System.out.println("A media de lancamentos para se obter 2 caras 2 vezes foi: "+ mediaLancamentos2Caras2Vezes+"\n");
 	}
 	
-	protected static int simular5Caras()
+	private static int simular5Caras()
 	{
 		int somaLancamentos = 0;
 		int lancamentos = 0;
@@ -131,7 +132,7 @@ public class MoedaInjusta
 		return somaLancamentos;
 	}
 
-	protected static int simular2Caras2Vezes()
+	private static int simular2Caras2Vezes()
 	{
 		int somaLancamentos = 0;
 		int lancamentos = 0;
@@ -145,11 +146,20 @@ public class MoedaInjusta
 
 	public static void main(String[] args)
 	{
-		// probabilidade de se obter caras p=2/3
-		String probabilidade = "2/3";
+		int quantidadeLancamentos = 10;
+		
+		//metodo simular recebe como parametro a string representando as chances de cara, ex 2/3
+		simular("2/3", quantidadeLancamentos);
+		simular("1/2", quantidadeLancamentos);
+		simular("3/8", quantidadeLancamentos);
+	}
+
+	private static void simular(String probabilidade, int totalLancamentos)
+	{
+		//String probabilidade = "2/3";
 
 		// quantidadeDeLancamentos
-		int totalLancamentos = 10;
+		//int totalLancamentos = 10;
 
 		formatarProbabilidades(probabilidade, totalLancamentos);
 
