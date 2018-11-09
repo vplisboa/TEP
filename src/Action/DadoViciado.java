@@ -1,5 +1,7 @@
 package Action;
 
+import java.util.Arrays;
+import java.util.List;
 /*Trabalho: Simular um dado desonesto, onde cada face pode ou nao ter um peso diferente, deseja-se simular a probabilidade de :
  *  
  *  - tres resultados iguais em 3 lancamentos seguidos
@@ -21,6 +23,11 @@ public class DadoViciado
 
 	private static void formatarProbabilidades(String... probabilidades)
 	{
+		List<String> lista = Arrays.asList(probabilidades);
+		
+		System.out.print("Rodando a simulacao para as probabilidades: ");
+		lista.stream().forEach(result -> System.out.print(result + " "));
+		System.out.println("");
 		
 		intervaloChancesFace1 = Integer.parseInt(probabilidades[0].split("/")[0]);
 		intervaloChancesFace2 = Integer.parseInt(probabilidades[1].split("/")[0]) + intervaloChancesFace1;
@@ -90,7 +97,8 @@ public class DadoViciado
 				valorAnterior = valor;
 			}
 		}
-		System.out.println("Resultado foi encontrado em " + numeroTentativas + " tentativas");
+		System.out.println("O numero de lancamentos para se obter"
+				+ "tres resultados iguais em tres lancamentos seguidos foi: " + numeroTentativas);
 	}
 	
 	//- dois pares seguidos em quatro lancamentos, exemplo: A = B, C = D
@@ -105,7 +113,8 @@ public class DadoViciado
 		{
 			if(valor1 == valor2 && valor3 == valor4)
 			{
-				System.out.println("Resultado foi encontrado em " + numeroTentativas + " tentativas");	
+				System.out.println("total de lancamentos para se obter dois pares seguidos em quatro"
+						+ "lancamentos foi: " + numeroTentativas + "\n");	
 				break;
 			}
 			valor1 = valor2;
@@ -113,22 +122,24 @@ public class DadoViciado
 			valor3 = valor4;
 			valor4 = escolherValor();
 			numeroTentativas++;
-			System.out.println(valor1 + " - " + valor2 + " - " + valor3 + " - " + valor4);
+			//System.out.println(valor1 + " - " + valor2 + " - " + valor3 + " - " + valor4);
 		}
 	}
 	
 	public static void main(String[] args)
 	{
-		String pesoFace1 = "1/6";
-		String pesoFace2 = "1/6";
-		String pesoFace3 = "1/6";
-		String pesoFace4 = "1/6";
-		String pesoFace5 = "1/6";
-		String pesoFace6 = "1/6";
+		//parametros sao os pesos da face1, face2,face3,face4,face5,face6 respectivamente
+		simular("1/6", "1/6", "1/6", "1/6", "1/6", "1/6");
+		simular("1/18", "1/18", "5/18", "4/18", "6/18", "1/18");
+		
+	}
+
+	private static void simular(String pesoFace1, String pesoFace2, String pesoFace3, String pesoFace4,
+			String pesoFace5, String pesoFace6)
+	{
 		formatarProbabilidades(pesoFace1,pesoFace2,pesoFace3,pesoFace4,pesoFace5,pesoFace6);
 		//lancarDado();
 		tresLancamentosTresResultadosIguais();
 		quatroLancamentosDoisParesSeguidos();
-		
 	}
 }
