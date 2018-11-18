@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class BloomFilter
@@ -12,8 +13,9 @@ public class BloomFilter
 	private static String tamanho;
 	private static float percentualErroToleravel;
 	private static int tamanhoOtimo;
-	private static int numeroOtimoFuncoesHash;
-	
+	private static long numeroOtimoFuncoesHash;
+	private static int[] set;
+
 	public BloomFilter(String tamanho, float percentualErroToleravel)
 	{
 		this.tamanho = tamanho;
@@ -32,37 +34,77 @@ public class BloomFilter
 
 	private static void calcularQuantidadeOtimaDeFuncoesHash(int n)
 	{
-		Double m = Math.ceil(((n * Math.log(percentualErroToleravel)) / Math.log(1 / Math.pow(2, Math.log(2)))));
-		long k = Math.round((m/n) * Math.log(2));
-		System.out.println(m.toString());
-		System.out.println(k);
+		Double numeroBits = Math.ceil(((n * Math.log(percentualErroToleravel)) / Math.log(1 / Math.pow(2, Math.log(2)))));
+		long numeroFuncoesHash = Math.round((numeroBits/n) * Math.log(2));
+		numeroOtimoFuncoesHash = numeroFuncoesHash;
+		tamanhoOtimo = numeroBits.intValue();
+		set = new int[tamanhoOtimo];
+//		System.out.println(numeroBits.intValue());
+//		System.out.println(numeroFuncoesHash);
 	}
 	
-	private static int calcularPosicaoBloomFilter(String entrada) throws NoSuchAlgorithmException
+	private static int calcularPosicaoBloomFilter(String entrada, int contador) throws NoSuchAlgorithmException
 	{
 		MessageDigest md = MessageDigest.getInstance(FUNCAO_HASH);
 		md.update(entrada.getBytes());
+		md.update(String.valueOf(contador).getBytes());
 		byte[] hashEntrada = md.digest();
 
 		// na declaracao do big integer, o primeiro parametro eh o signum
 		// -1 para negativo, 0 para zero ou 1 para positivo
 		BigInteger numeroHashEntrada = new BigInteger(1,hashEntrada);
-		int posicaoBloomFilter = numeroHashEntrada.mod(new BigInteger(tamanho)).intValue();
-		
-		//System.out.println(numeroHashEntrada.toString(16));
-		//System.out.println(numeroHashEntrada.mod(new BigInteger("2")));
-		//System.out.println(posicaoBloomFilter);
+		int posicaoBloomFilter = numeroHashEntrada.mod(new BigInteger(String.valueOf(tamanhoOtimo))).intValue();
 		
 		return posicaoBloomFilter;
 	}
 
+	private static void adicionarNaSet(String teste) throws NoSuchAlgorithmException
+	{
+		for(int i = 0;i<numeroOtimoFuncoesHash;i++)
+		{
+			int a = calcularPosicaoBloomFilter(teste,i);
+			set[a] = 1;
+		}
+	}
+	
+	private static String buscarNaSet(String teste) throws NoSuchAlgorithmException
+	{
+		for(int i = 0;i<numeroOtimoFuncoesHash;i++)
+		{
+			int a = calcularPosicaoBloomFilter(teste,i);
+			if(set[a] == 1)
+			{
+				return teste + " pode estar presente";
+			}
+		}
+		return teste+" nao esta presente.";
+	}
+
+	private static List<String> prePopularListaPalavras()
+	{
+		List<String> lista = new ArrayList<String>();
+		lista.add("palavra1");
+		lista.add("palavra2");
+		lista.add("palavra3");
+		
+		return lista;
+	}
+
 	public static void main(String[] args) throws NoSuchAlgorithmException
 	{
-		String teste = "batata";
+		List<String> lista = prePopularListaPalavras();
 		
-		BloomFilter bloomFilter = new BloomFilter("95", 0.150746464f);
+		BloomFilter bloomFilter = new BloomFilter("4000", 0.150746464f);
 		
-		calcularQuantidadeOtimaDeFuncoesHash(4000);
-		System.out.println(calcularPosicaoBloomFilter(teste));
+		calcularQuantidadeOtimaDeFuncoesHash(lista.size());
+		
+		for (String elemento : lista)
+		{
+			adicionarNaSet(elemento);
+		}
+		
+		System.out.println(buscarNaSet("jujuba"));
+		
+		System.out.println(Arrays.toString(set));
 	}
 }
