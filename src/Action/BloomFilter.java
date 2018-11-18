@@ -16,20 +16,15 @@ public class BloomFilter
 	private static long numeroOtimoFuncoesHash;
 	private static int[] set;
 
-	public BloomFilter(String tamanho, float percentualErroToleravel)
-	{
-		this.tamanho = tamanho;
-		this.percentualErroToleravel = percentualErroToleravel;
-	}
-	
 	private static void calcularProbabilidadeFalsosPositivosAlterandoQuantidadeFuncoesHash()
 	{
-
+		numeroOtimoFuncoesHash = numeroOtimoFuncoesHash - 1;
 	}
 	
 	private static void calcularProbabilidadeFalsosPositivosAlterandoTamanhoFiltro()
 	{
-		
+		tamanhoOtimo = tamanhoOtimo - 1;
+		set = new int[tamanhoOtimo];
 	}
 
 	private static void calcularQuantidadeOtimaDeFuncoesHash(int n)
@@ -94,7 +89,7 @@ public class BloomFilter
 	{
 		List<String> lista = prePopularListaPalavras();
 		
-		BloomFilter bloomFilter = new BloomFilter("4000", 0.150746464f);
+		percentualErroToleravel = 0.156f;
 		
 		calcularQuantidadeOtimaDeFuncoesHash(lista.size());
 		
@@ -103,8 +98,24 @@ public class BloomFilter
 			adicionarNaSet(elemento);
 		}
 		
-		System.out.println(buscarNaSet("jujuba"));
+		String palavraASerBuscada = "jujuba";
 		
-		System.out.println(Arrays.toString(set));
+		System.out.println(buscarNaSet(palavraASerBuscada));
+		
+		System.out.println("\nAlterando quantidade funcoes hash");
+		calcularProbabilidadeFalsosPositivosAlterandoQuantidadeFuncoesHash();
+		for (String elemento : lista)
+		{
+			adicionarNaSet(elemento);
+		}
+		System.out.println(buscarNaSet(palavraASerBuscada));
+		
+		System.out.println("\nAlterando tamanho do filtro");
+		calcularProbabilidadeFalsosPositivosAlterandoTamanhoFiltro();
+		for (String elemento : lista)
+		{
+			adicionarNaSet(elemento);
+		}
+		System.out.println(buscarNaSet(palavraASerBuscada));
 	}
 }
